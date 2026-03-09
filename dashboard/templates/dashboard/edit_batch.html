@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать партию - Мясной магазин</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            color: #ffffff !important;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .btn-logout {
+            background: #c53030;
+            border: none;
+            border-radius: 30px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .card {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(43, 108, 176, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #8051a2 0%, #4c1d95 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(128, 81, 162, 0.3);
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-control:focus {
+            border-color: #2b6cb0;
+            box-shadow: 0 0 0 0.25rem rgba(43, 108, 176, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="{% url 'dashboard:index' %}">
+                <i class="bi bi-shop" style="color: #ffffff; margin-right: 8px;"></i>
+                Мясной магазин <span>«Правильные продукты»</span>
+            </a>
+
+            <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center me-3">
+                    <i class="bi bi-person-circle" style="color: #ffffff; margin-right: 8px; font-size: 1.5rem;"></i>
+                    <span style="color: #ffffff; font-weight: 500;">{{ username }}</span>
+                </div>
+
+                <div class="d-flex align-items-center">
+                    <a href="{% url 'dashboard:logout' %}" class="btn btn-logout">
+                        Выйти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <!-- Заголовок страницы -->
+        <div class="page-header text-center">
+            <h2 class="mb-2">Редактировать партию</h2>
+            <p class="mb-0">Измените данные партии №{{ batch.3 }}</p>
+        </div>
+
+        <!-- Отладочный вывод -->
+        <div class="alert alert-info mb-3">
+            <strong>Отладка:</strong>
+            Таблица temperaturemodes: {{ temperature_modes }}
+        </div>
+
+        <!-- Форма редактирования -->
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-pencil-square"></i> Форма редактирования партии
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'dashboard:edit_batch' batch.0 %}">
+                    {% csrf_token %}
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Продукт</label>
+                            <input type="text" class="form-control" value="{{ batch.8 }}" disabled>
+                            <input type="hidden" name="product_id" value="{{ batch.1 }}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Поставщик</label>
+                            <input type="text" class="form-control" value="{{ batch.9 }}" disabled>
+                            <input type="hidden" name="supplier_id" value="{{ batch.2 }}">
+                        </div>
+
+                        <!-- НОВОЕ ПОЛЕ: Режим хранения -->
+                        <div class="col-md-6">
+                            <label class="form-label">Режим хранения <span class="text-danger">*</span></label>
+
+
+                            <select name="mode_id" class="form-select" required>
+                                <option value="">Выберите режим хранения</option>
+                                {% for mode in temperature_modes %}
+                                    <option value="{{ mode.0 }}" {% if mode.0 == batch.7 %}selected{% endif %}>
+                                        {{ mode.1|default:"Неизвестный режим" }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Номер партии</label>
+                            <input type="text" name="batch_number" class="form-control"
+                                   value="{{ batch.3 }}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Количество, кг</label>
+                            <input type="number" name="quantity" class="form-control" step="0.001"
+                                   value="{{ batch.6 }}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Дата производства</label>
+                            <input type="date" name="production_date" class="form-control"
+                                   value="{{ batch.4|date:'Y-m-d' }}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Срок годности</label>
+                            <input type="date" name="expiration_date" class="form-control"
+                                   value="{{ batch.5|date:'Y-m-d' }}" required>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4">
+                        <a href="{% url 'dashboard:batches' %}" class="btn btn-secondary me-2">
+                            <i class="bi bi-arrow-left"></i> Отмена
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Сохранить изменения
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

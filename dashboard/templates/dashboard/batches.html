@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление партиями - Мясной магазин</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            color: #ffffff !important;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .navbar-brand span {
+            color: #ffffff !important;
+            font-weight: 400;
+        }
+
+        .btn-logout {
+            background: #c53030;
+            border: none;
+            border-radius: 30px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: #9b2335;
+            transform: translateY(-2px);
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .card {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(43, 108, 176, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(185, 28, 28, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #8051a2 0%, #4c1d95 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(128, 81, 162, 0.3);
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-control:focus {
+            border-color: #2b6cb0;
+            box-shadow: 0 0 0 0.25rem rgba(43, 108, 176, 0.25);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .badge {
+            padding: 0.5em 1em;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%);
+        }
+
+        .badge-danger {
+            background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+        }
+
+        .badge-warning {
+            background: linear-gradient(135deg, #8051a2 0%, #4c1d95 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="{% url 'dashboard:index' %}">
+                <i class="bi bi-shop" style="color: #ffffff; margin-right: 8px;"></i>
+                Мясной магазин <span>«Правильные продукты»</span>
+            </a>
+
+            <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center me-3">
+                    <i class="bi bi-person-circle" style="color: #ffffff; margin-right: 8px; font-size: 1.5rem;"></i>
+                    <span style="color: #ffffff; font-weight: 500;">{{ username }}</span>
+                </div>
+
+                <div class="d-flex align-items-center">
+                    <a href="{% url 'dashboard:logout' %}" class="btn btn-logout">
+                        Выйти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <!-- Заголовок страницы -->
+        <div class="page-header text-center">
+            <h2 class="mb-2">Управление партиями продукции</h2>
+            <p class="mb-0">Добавление, редактирование и удаление партий мясной продукции</p>
+        </div>
+
+        <!-- Фильтры и поиск -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="bi bi-funnel"></i> Фильтры и поиск
+            </div>
+            <div class="card-body">
+                <form method="get" action="{% url 'dashboard:batches' %}" class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Поставщик</label>
+                        <select name="supplier" class="form-select">
+                            <option value="">Все поставщики</option>
+                            {% for supplier in suppliers %}
+                            <option value="{{ supplier }}" {% if supplier_filter == supplier %}selected{% endif %}>
+                                {{ supplier }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Статус</label>
+                        <select name="status" class="form-select">
+                            <option value="">Все статусы</option>
+                            {% for status in statuses %}
+                            <option value="{{ status }}" {% if status_filter == status %}selected{% endif %}>
+                                {{ status }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Поиск</label>
+                        <input type="text" name="search" class="form-control"
+                               placeholder="Поиск по продукту или поставщику..."
+                               value="{{ search_query }}">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-search"></i> Применить
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Кнопка добавления -->
+        <div class="d-flex justify-content-between mb-3">
+            <h4>Список партий</h4>
+            <a href="{% url 'dashboard:add_batch' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Добавить партию
+            </a>
+        </div>
+
+        <!-- Таблица партий -->
+        <div class="card">
+            <div class="card-body">
+                {% if batches %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Продукт</th>
+                                <th>Поставщик</th>
+                                <th>Номер партии</th>
+                                <th>Дата производства</th>
+                                <th>Срок годности</th>
+                                <th>Количество, кг</th>
+                                <th>Статус</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for batch in batches %}
+                            <tr>
+                                <td><strong>{{ batch.0 }}</strong></td>
+                                <td>{{ batch.1 }}</td>
+                                <td>{{ batch.2 }}</td>
+                                <td>{{ batch.3 }}</td>
+                                <td>{{ batch.4|date:"d.m.Y" }}</td>
+                                <td>{{ batch.5|date:"d.m.Y" }}</td>
+                                <td><strong>{{ batch.6 }} кг</strong></td>
+                                <td>
+                                    {% if batch.7 == 'active' %}
+                                        <span class="badge badge-success">Активная</span>
+                                    {% elif batch.7 == 'expired' %}
+                                        <span class="badge badge-danger">Просрочена</span>
+                                    {% else %}
+                                        <span class="badge badge-warning">{{ batch.7 }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'dashboard:edit_batch' batch.0 %}" class="btn btn-warning btn-sm me-1">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="{% url 'dashboard:delete_batch' batch.0 %}"
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Вы уверены, что хотите удалить эту партию?')">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 4rem; color: #cbd5e0;"></i>
+                    <h4 class="mt-3">Нет партий</h4>
+                    <p class="text-muted">Добавьте первую партию продукции</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
